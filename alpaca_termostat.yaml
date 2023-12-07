@@ -23,15 +23,16 @@ blueprint:
           domain: number
 trigger_variables:
   sensor_entity: !input zewnetrzny_sensor_temperatury
+  trv_entity: !input glowica_trv
 trigger:
-  - platform: numeric_state
-    entity_id: !input glowica_trv
-    attribute: current_temperature
-    above: "{{ ( states(sensor_entity) | float(0) + 0.2 ) | round(1) }}"
-  - platform: numeric_state
-    entity_id: !input glowica_trv
-    attribute: current_temperature
-    below: "{{ ( states(sensor_entity) | float(0) - 0.2 ) | round(1) }}"
+  - platform: template
+    value_template: >-
+      {{ ( states(sensor_entity) | float(0) + 0.2 ) |
+      round(1) > state_attr(trv_entity, 'current_temperature') | float(0) }}
+  - platform: template
+    value_template: >-
+      {{ ( states(sensor_entity) | float(0) - 0.2 ) |
+      round(1) < state_attr(trv_entity, 'current_temperature') | float(0) }}
 condition: []
 action:
   - variables:
