@@ -43,5 +43,5 @@ action:
     target:
       entity_id: !input korekta_temperatury
     data:
-      value: "{{ ( states(sensor_entity) | float(0) - states(correction_entity) | float (0) - state_attr(trv_entity, 'current_temperature') ) | round(1) }}"
+      value: "{{ states(correction_entity) | float (0) + (states(sensor_entity) | float(0) - state_attr(trv_entity, 'current_temperature') ) | round(1) }}"
 mode: single
