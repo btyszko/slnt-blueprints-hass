@@ -27,11 +27,11 @@ trigger:
   - platform: numeric_state
     entity_id: !input glowica_trv
     attribute: current_temperature
-    above: "{{ states(sensor_entity) | float(0) + 0.2 }}"
+    above: "{{ ( states(sensor_entity) | float(0) + 0.2 ) | round(1) }}"
   - platform: numeric_state
     entity_id: !input glowica_trv
     attribute: current_temperature
-    below: "{{ states(sensor_entity) | float(0) - 0.2 }}"
+    below: "{{ ( states(sensor_entity) | float(0) - 0.2 ) | round(1) }}"
 condition: []
 action:
   - variables:
