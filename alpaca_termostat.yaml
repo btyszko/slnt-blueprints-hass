@@ -1,0 +1,43 @@
+blueprint:
+  name: Korekta temperatury TRV
+  description: Korekta temperatury na podstawie zewnętrznego sensora
+  domain: automation
+  input:
+    glowica_trv:
+      name: Głowica TRV
+      description: Wybierz encję głowicy TRV
+      selector:
+        entity:
+          domain: climate
+    zewnetrzny_sensor_temperatury:
+      name: Zewnętrzny sensor temperatury
+      description: Wybierz encję zewnętrznego sensora temperatury
+      selector:
+        entity:
+          domain: sensor
+    korekta_temperatury:
+      name: Zmienna "Korekta temperatury"
+      description: Wybierz encję zmiennej "Korekta temperatury"
+      selector:
+        entity:
+          domain: number
+mode: single
+trigger:
+  - platform: state
+    entity_id: !input 'glowica_trv'
+    attribute: current_temperature
+    above: "{{ state_attr(input('zewnetrzny_sensor_temperatury'), 'state') | float + 0.2 }}"
+  - platform: state
+    entity_id: !input 'glowica_trv'
+    attribute: current_temperature
+    below: "{{ state_attr(input('zewnetrzny_sensor_temperatury'), 'state') | float - 0.2 }}"
+
+action:
+  - variables:
+      roznica_temperatury: >-
+        {{ states(input('glowica_trv')) | float - states(input('zewnetrzny_sensor_temperatury')) | float }}
+  - service: number.set_value
+    target:
+      entity_id: !input 'korekta_temperatury'
+    data:
+      value: "{{ state_attr(input('korekta_temperatury'), 'state') | float + roznica_temperatury }}"
