@@ -26,11 +26,11 @@ trigger:
   - platform: numeric_state
     entity_id: !input 'glowica_trv'
     attribute: current_temperature
-    above: "{{ state_attr(input('zewnetrzny_sensor_temperatury'), 'state') | float + 0.2 | round(1) }}"
+    above: "{{ states(input('glowica_trv')) | float + 0.2 | round(1) }}"
   - platform: numeric_state
     entity_id: !input 'glowica_trv'
     attribute: current_temperature
-    below: "{{ state_attr(input('zewnetrzny_sensor_temperatury'), 'state') | float - 0.2 | round(1) }}"
+    below: "{{ states(input('glowica_trv')) | float - 0.2 | round(1) }}"
 
 action:
   - variables:
