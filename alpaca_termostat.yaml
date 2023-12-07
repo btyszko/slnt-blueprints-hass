@@ -34,7 +34,6 @@ trigger:
     below: "{{ states('sensor_entity') | float(0) - 0.2 }}"
 condition: []
 action:
-action:
   - variables:
       trv_entity: !input glowica_trv
       sensor_entity: !input zewnetrzny_sensor_temperatury
