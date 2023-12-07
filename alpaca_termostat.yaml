@@ -1,43 +1,48 @@
 blueprint:
   name: Korekta temperatury TRV
-  description: Korekta temperatury na podstawie zewnętrznego sensora
+  description: Korekta temperatury na podstawie zewnetrznego sensora
   domain: automation
   input:
     glowica_trv:
-      name: Głowica TRV
-      description: Wybierz encję głowicy TRV
+      name: Glowica TRV
+      description: Wybierz encje glowicy TRV
       selector:
         entity:
           domain: climate
     zewnetrzny_sensor_temperatury:
-      name: Zewnętrzny sensor temperatury
-      description: Wybierz encję zewnętrznego sensora temperatury
+      name: Zewnetrzny sensor temperatury
+      description: Wybierz encje zewnetrznego sensora temperatury
       selector:
         entity:
           domain: sensor
     korekta_temperatury:
       name: Zmienna "Korekta temperatury"
-      description: Wybierz encję zmiennej "Korekta temperatury"
+      description: Wybierz encje zmiennej "Korekta temperatury"
       selector:
         entity:
           domain: number
-mode: single
+trigger_variables:
+  sensor_entity: !input zewnetrzny_sensor_temperatury
 trigger:
   - platform: numeric_state
-    entity_id: !input 'glowica_trv'
+    entity_id: !input glowica_trv
     attribute: current_temperature
-    above: "{{ states(input('glowica_trv')) | float + 0.2 | round(1) }}"
+    above: "{{ states('sensor_entity') | float(0) + 0.2 }}"
   - platform: numeric_state
-    entity_id: !input 'glowica_trv'
+    entity_id: !input glowica_trv
     attribute: current_temperature
-    below: "{{ states(input('glowica_trv')) | float - 0.2 | round(1) }}"
-
+    below: "{{ states('sensor_entity') | float(0) - 0.2 }}"
+condition: []
+action:
 action:
   - variables:
-      roznica_temperatury: >-
-        {{ states(input('glowica_trv')) | float - states(input('zewnetrzny_sensor_temperatury')) | float }}
+      trv_entity: !input glowica_trv
+      sensor_entity: !input zewnetrzny_sensor_temperatury
+      correction_entity: !input korekta_temperatury
+
   - service: number.set_value
     target:
-      entity_id: !input 'korekta_temperatury'
+      entity_id: !input korekta_temperatury
     data:
-      value: "{{ state_attr(input('korekta_temperatury'), 'state') | float + roznica_temperatury }}"
+      value: "{{ (states('korekta_temperatury') | float (0) + state_attr('trv_entity', 'current_temperature') - states('sensor_entity') | float(0) ) | round(1) }}"
+mode: single
