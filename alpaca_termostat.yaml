@@ -16,7 +16,7 @@ blueprint:
         entity:
           domain: sensor
     korekta_temperatury:
-      name: Zmienna "Korekta temperatury"
+      name: Zmienna Korekta temperatury
       description: Wybierz encje zmiennej "Korekta temperatury"
       selector:
         entity:
@@ -27,21 +27,20 @@ trigger:
   - platform: numeric_state
     entity_id: !input glowica_trv
     attribute: current_temperature
-    above: "{{ states('sensor_entity') | float(0) + 0.2 }}"
+    above: "{{ states(sensor_entity) | float(0) + 0.2 }}"
   - platform: numeric_state
     entity_id: !input glowica_trv
     attribute: current_temperature
-    below: "{{ states('sensor_entity') | float(0) - 0.2 }}"
+    below: "{{ states(sensor_entity) | float(0) - 0.2 }}"
 condition: []
 action:
   - variables:
       trv_entity: !input glowica_trv
       sensor_entity: !input zewnetrzny_sensor_temperatury
       correction_entity: !input korekta_temperatury
-
   - service: number.set_value
     target:
       entity_id: !input korekta_temperatury
     data:
-      value: "{{ (states('korekta_temperatury') | float (0) + state_attr('trv_entity', 'current_temperature') - states('sensor_entity') | float(0) ) | round(1) }}"
+      value: "{{ (states(korekta_temperatury) | float (0) + state_attr(trv_entity, 'current_temperature') - states(sensor_entity) | float(0) ) | round(1) }}"
 mode: single
