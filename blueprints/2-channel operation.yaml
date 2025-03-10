@@ -1,7 +1,7 @@
 blueprint:
   name: 2 channel operation
   domain: automation
-  author: Kurczak57
+  author: btyszko
   homeassistant:
     min_version: 2024.6.0
   input:
