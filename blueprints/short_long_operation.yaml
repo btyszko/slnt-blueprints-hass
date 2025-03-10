@@ -1,5 +1,5 @@
 blueprint:
-  name: 2 channel operation
+  name: Short/long operation
   domain: automation
   author: btyszko
   homeassistant:
