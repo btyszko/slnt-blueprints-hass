@@ -1,0 +1,64 @@
+blueprint:
+  name: 2 channel operation
+  domain: automation
+  homeassistant:
+    min_version: 2024.6.0
+  input:
+    toggle_action_trigger:
+      name: Toggle action
+      description: The "toggle" action of the device or equivalent.
+      selector:
+        trigger:
+    delay_ms:
+      name: Delay (ms)
+      description: The delay in milliseconds to wait before executing the secondary action after the initial trigger.
+      selector:
+        number:
+          min: 100
+          max: 3000
+    primary_action:
+      name: Primary action
+      description: The primary action to be executed by the automation (short click).
+      selector:
+        action:
+    secondary_action:
+      name: Secondary action
+      description: The secondary action to be executed by the automation (long click).
+      selector:
+        action:
+mode: single
+max_exceeded: silent
+triggers:
+  !input toggle_action_trigger
+conditions: []
+actions:
+  - wait_for_trigger:
+      !input toggle_action_trigger
+    timeout:
+      hours: 0
+      minutes: 0
+      seconds: 0
+      milliseconds: !input delay_ms
+  - if:
+      - condition: template
+        value_template: "{{wait.completed}}"
+    then:
+      - alias: "Run the primary action"
+        choose: []
+        default: !input primary_action
+      - delay:
+          hours: 0
+          minutes: 0
+          seconds: 0
+          milliseconds: 100
+    else:
+      - alias: "Run the secondary action"
+        choose: []
+        default: !input secondary_action
+      - wait_for_trigger:
+          !input toggle_action_trigger
+        timeout:
+          hours: 0
+          minutes: 0
+          seconds: 0
+          milliseconds: !input delay_ms
