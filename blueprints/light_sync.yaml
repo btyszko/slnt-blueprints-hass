@@ -15,7 +15,7 @@ sequence:
   - if:
       - condition: template
         value_template: >-
-          {{ target_entities | map('states') | select('equalto', 'on') | list | count > 0
+          {{ lights | map('states') | select('equalto', 'on') | list | count > 0
           }}
     then:
       - action: light.turn_off
