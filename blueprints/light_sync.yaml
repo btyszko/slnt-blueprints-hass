@@ -10,8 +10,6 @@ blueprint:
         target:
           entity:
             domain: light
-            multiple: true
-
 sequence:
   - if:
       - condition: template
