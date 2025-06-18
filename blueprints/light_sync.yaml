@@ -1,5 +1,5 @@
 blueprint:
-  name: synchronize lights script
+  name: Synchronize lights without group
   description: Script checking if any light is on and turning them all off, or turning them all on if none are on.
   domain: script
   input:
@@ -20,11 +20,9 @@ sequence:
       - action: light.turn_off
         metadata: {}
         data: {}
-        target:
-          entity_id: !input lights
+        target: !input lights
     else:
       - action: light.turn_on
         metadata: {}
         data: {}
-        target:
-          entity_id: !input lights
+        target: !input lights
