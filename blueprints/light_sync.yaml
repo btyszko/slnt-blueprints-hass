@@ -12,10 +12,6 @@ blueprint:
             domain: light
           multiple: true
 sequence:
-
-  - variables:
-      target_entities: >-
-        {{lights.entity_id if lights.entity_id is list else []}}
   - if:
       - condition: template
         value_template: >-
