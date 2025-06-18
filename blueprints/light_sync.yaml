@@ -14,7 +14,7 @@ blueprint:
 sequence:
   - variables:
       lights_on: >
-        {{ iif(lights is string, [lights], lights)
+        {{ if(lights is string, [lights], lights)
            | select('is_state', 'on')
            | list }}
 
