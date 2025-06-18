@@ -7,9 +7,10 @@ blueprint:
       name: Lights to synchronize
       description: list of `light` entities to synchronize
       selector:
-        target:
-          entity:
+        entity:
+          filter:
             domain: light
+          multiple: true
 sequence:
 
   - variables:
@@ -24,9 +25,11 @@ sequence:
       - action: light.turn_off
         metadata: {}
         data: {}
-        target: !input lights
+        target:
+          entity_id: !input lights
     else:
       - action: light.turn_on
         metadata: {}
         data: {}
-        target: !input lights
+        target: 
+          entity_id: !input lights
