@@ -1,26 +1,32 @@
 blueprint:
-  name: Wyłącz światła jeśli któreś jest włączone
-  description: Skrypt sprawdza, czy którekolwiek światło z listy jest włączone i jeśli tak, wyłącza je wszystkie.
+  name: synchronize lights script
+  description: Script checking if any light is on and turning them all off, or turning them all on if none are on.
   domain: script
   input:
     lights:
-      name: Światła
-      description: Wybierz światła do sprawdzenia i wyłączenia
+      name: Lights to synchronize
+      description: list of `light` entities to synchronize
       selector:
-        entity:
-          multiple: true
-          domain: light
+        target:
+          entity:
+            domain: light
+            multiple: true
 
 sequence:
-  - variables:
-      lights_on: >
-        {{ if(lights is string, [lights], lights)
-           | select('is_state', 'on')
-           | list }}
-
-  - choose:
-      - conditions: "{{ lights_on | count > 0 }}"
-        sequence:
-          - service: light.turn_off
-            target:
-              entity_id: "{{ lights_on }}"
+  - if:
+      - condition: template
+        value_template: >-
+          {{ lights | map('states') | select('equalto', 'on') | list | count > 0
+          }}
+    then:
+      - action: light.turn_off
+        metadata: {}
+        data: {}
+        target:
+          entity_id: "{{lights}}"
+    else:
+      - action: light.turn_on
+        metadata: {}
+        data: {}
+        target:
+          entity_id: "{{lights}}"
