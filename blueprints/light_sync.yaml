@@ -11,10 +11,13 @@ blueprint:
           entity:
             domain: light
 sequence:
+
+  - variables:
+      target_entities: "{{ lights.entity_id | default([], true) }}"
   - if:
       - condition: template
         value_template: >-
-          {{ lights | map('states') | select('equalto', 'on') | list | count > 0
+          {{ target_entities | map('states') | select('equalto', 'on') | list | count > 0
           }}
     then:
       - action: light.turn_off
