@@ -61,5 +61,4 @@ actions:
         timeout:
           hours: 0
           minutes: 0
-          seconds: 0
-          milliseconds: !input delay_ms
+          seconds: 3
