@@ -1,0 +1,23 @@
+blueprint:
+  name: Wyłącz światła, jeśli któreś jest włączone
+  description: Skrypt sprawdzający, czy któreś światło z listy jest włączone. Jeśli tak — wyłącza wszystkie.
+  domain: script
+  input:
+    lights:
+      name: Światła do sprawdzenia
+      description: Lista encji typu `light`
+      selector:
+        target:
+          entity:
+            domain: light
+
+sequence:
+  - condition: template
+    value_template: >
+      {{ expand(lights.entity_id)
+         | selectattr('state', 'equalto', 'on')
+         | list
+         | count > 0 }}
+
+  - service: light.turn_off
+    target: "{{ lights }}"
