@@ -11,11 +11,13 @@ blueprint:
           filter:
             domain: light
           multiple: true
+variables:
+  targeted_lights: !input lights
 sequence:
   - if:
       - condition: template
         value_template: >-
-          {{ lights | map('states') | select('equalto', 'on') | list | count > 0
+          {{ targeted_lights | map('states') | select('equalto', 'on') | list | count > 0
           }}
     then:
       - action: light.turn_off
