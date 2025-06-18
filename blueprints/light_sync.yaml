@@ -23,10 +23,10 @@ sequence:
         metadata: {}
         data: {}
         target:
-          entity_id: "{{lights}}"
+          entity_id: !input lights
     else:
       - action: light.turn_on
         metadata: {}
         data: {}
         target:
-          entity_id: "{{lights}}"
+          entity_id: !input lights
