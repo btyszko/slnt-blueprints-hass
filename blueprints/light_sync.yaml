@@ -1,33 +1,60 @@
 blueprint:
   name: Synchronize lights without group
-  description: Script checking if any light is on and turning them all off, or turning them all on if none are on.
+  description: Script checking if any light is on and turning them all off, or turning
+    them all on if none are on.
   domain: script
-  input:
-    lights:
-      name: Lights to synchronize
-      description: list of `light` entities to synchronize
-      selector:
-        entity:
-          filter:
-            domain: light
-          multiple: true
-variables:
-  targeted_lights: !input lights
 sequence:
   - if:
       - condition: template
-        value_template: >-
-          {{ targeted_lights | map('states') | select('equalto', 'on') | list | count > 0
-          }}
+        value_template: "{{inclusion_mode}}"
     then:
-      - action: light.turn_off
-        metadata: {}
-        data: {}
-        target:
-          entity_id: !input lights
+      - if:
+          - condition: template
+            value_template: >-
+              {{ lights | map('states') | select('equalto', 'off') | list |
+              count > 0 }}
+        then:
+          - action: light.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id: "{{lights}}"
+        else:
+          - action: light.turn_off
+            metadata: {}
+            data: {}
+            target:
+              entity_id: "{{lights}}"
     else:
-      - action: light.turn_on
-        metadata: {}
-        data: {}
-        target: 
-          entity_id: !input lights
+      - if:
+          - condition: template
+            value_template: >-
+              {{ lights | map('states') | select('equalto', 'on') | list | count
+              > 0 }}
+        then:
+          - action: light.turn_off
+            metadata: {}
+            data: {}
+            target:
+              entity_id: "{{lights}}"
+        else:
+          - action: light.turn_on
+            metadata: {}
+            data: {}
+            target:
+              entity_id: "{{lights}}"
+fields:
+  lights:
+    name: Lights to synchronise
+    required: true
+    selector:
+      entity:
+        domain: light
+        multiple: true
+  inclusion_mode:
+    selector:
+      boolean: {}
+    name: Inclusion mode
+    description: If inclusion is turned on lights will be synchronized to ON if any is lit.
+    required: true
+    default: false
