@@ -40,7 +40,7 @@ actions:
   - action: number.set_value
     metadata: {}
     data:
-      value: "{{trigger.to_state}}"
+      value: "{{trigger.to_state | float (0)}}"
     target:
       entity_id: !input "climate"
 
