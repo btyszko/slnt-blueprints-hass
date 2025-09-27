@@ -25,6 +25,13 @@ triggers:
     
 conditions: []
 actions:
+  - action: select.select_option
+    metadata: {}
+    data:
+      option: external
+    target:
+      entity_id: {{climate}}_sensor
+
   - action: number.set_value
     metadata: {}
     data:
