@@ -10,21 +10,19 @@ blueprint:
       selector:
         entity:
           domain: sensor
-          multiple: true
     climate:
       name: Aqara TRV
       required: true
       selector:
         entity:
           domain: climate
-          multiple: false
 
 mode: single
 max_exceeded: silent
 
 triggers:
   - trigger: state
-    entity_id: !input temp_sensor
+    entity_id: !input "temp_sensor"
     
 conditions: []
 actions:
@@ -33,4 +31,5 @@ actions:
     data:
       value: "{{trigger.to_state}}"
     target:
-      entity_id: !input climate
+      entity_id: !input "climate"
+
