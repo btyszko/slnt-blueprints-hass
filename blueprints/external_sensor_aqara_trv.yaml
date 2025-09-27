@@ -6,13 +6,11 @@ blueprint:
   input:
     temp_sensor:
       name: Lights to synchronise
-      required: true
       selector:
         entity:
           domain: sensor
     climate:
       name: Aqara TRV
-      required: true
       selector:
         entity:
           domain: climate
