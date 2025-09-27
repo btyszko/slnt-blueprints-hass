@@ -5,10 +5,10 @@ blueprint:
 
   input:
     sensor_selector:
-      name: Internal_external selector
+      name: Internal/external selector
       selector:
         entity:
-          domain: selector
+          domain: select
     temp_sensor:
       name: External sensor to synchronise
       selector:
