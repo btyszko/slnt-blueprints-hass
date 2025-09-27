@@ -4,6 +4,11 @@ blueprint:
   domain: automation
 
   input:
+    sensor_selector:
+      name: Internal_external selector
+      selector:
+        entity:
+          domain: selector
     temp_sensor:
       name: External sensor to synchronise
       selector:
@@ -30,7 +35,7 @@ actions:
     data:
       option: external
     target:
-      entity_id: "{{climate}}_sensor"
+      entity_id: !input "sensor_selector"
 
   - action: number.set_value
     metadata: {}
