@@ -1,5 +1,5 @@
 blueprint:
-  name: External temperature sensor for Aqara TRV
+  name: External sensor for Aqara TRV
   description: Synchronise external temperature sensor with Aqara TRV
   domain: automation
 
