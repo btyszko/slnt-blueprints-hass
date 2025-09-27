@@ -30,7 +30,7 @@ actions:
     data:
       option: external
     target:
-      entity_id: {{climate}}_sensor
+      entity_id: "{{climate}}_sensor"
 
   - action: number.set_value
     metadata: {}
