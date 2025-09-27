@@ -40,7 +40,7 @@ actions:
   - action: number.set_value
     metadata: {}
     data:
-      value: "{{states('temp_sensor') | float (0)}}"
+      value: "{{states(temp_sensor) | float (0)}}"
     target:
       entity_id: !input "climate"
 
