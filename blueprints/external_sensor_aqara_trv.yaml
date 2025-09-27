@@ -5,10 +5,11 @@ blueprint:
 
   input:
     temp_sensor:
-      name: Lights to synchronise
+      name: External sensor to synchronise
       selector:
         entity:
           domain: sensor
+          device_class: temperature
     climate:
       name: Aqara TRV
       selector:
