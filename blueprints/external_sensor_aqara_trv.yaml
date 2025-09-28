@@ -64,6 +64,6 @@ actions:
       - action: number.set_value
         metadata: {}
         data:
-          value: "{{states('temp_sensor') | float (25)}}"
+          value: "{{states(!input "temp_sensor")}}"
         target:
           entity_id: !input "aqara_trv"
