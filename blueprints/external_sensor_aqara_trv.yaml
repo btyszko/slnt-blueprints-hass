@@ -27,6 +27,9 @@ blueprint:
 mode: single
 max_exceeded: silent
 
+variables:
+  var_temp_sensor: !input "temp_sensor"
+  
 triggers:
   - trigger: state
     entity_id: !input "temp_sensor"
@@ -64,6 +67,6 @@ actions:
       - action: number.set_value
         metadata: {}
         data:
-          value: "{{states(!input "temp_sensor")}}"
+          value: "{{states('var_temp_sensor')}}"
         target:
           entity_id: !input "aqara_trv"
