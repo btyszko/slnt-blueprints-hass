@@ -8,9 +8,8 @@ blueprint:
       name: Internal/external selector
       selector:
         entity:
-          filter:
-            - intergraion: mqtt
-              domain: select
+          intergraion: mqtt
+          domain: select
 
     temp_sensor:
       name: External sensor to synchronise
@@ -22,9 +21,8 @@ blueprint:
       name: Aqara TRV
       selector:
         entity:
-          filter:
-            - intergraion: mqtt
-              domain: number
+          intergraion: mqtt
+          domain: number
 
 mode: single
 max_exceeded: silent
