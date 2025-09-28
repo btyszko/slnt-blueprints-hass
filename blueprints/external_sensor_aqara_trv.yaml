@@ -2,16 +2,16 @@ blueprint:
   name: External sensor for Aqara TRV
   description: Synchronise external temperature sensor with Aqara TRV
   domain: automation
-
+  
   input:
     sensor_selector:
       name: Internal/external selector
       selector:
         entity:
-          domain: select
-        filter:
-          intergraion: mqtt
-          model: "SRTS-A01"
+          filter:
+            - intergraion: mqtt
+              domain: select
+              model: "SRTS-A01"
 
     temp_sensor:
       name: External sensor to synchronise
@@ -23,10 +23,10 @@ blueprint:
       name: Aqara TRV
       selector:
         entity:
-          domain: number
-        filter:
-          intergraion: mqtt
-          model: "SRTS-A01"
+          filter:
+            - intergraion: mqtt
+              domain: number
+              model: "SRTS-A01"
 
 mode: single
 max_exceeded: silent
