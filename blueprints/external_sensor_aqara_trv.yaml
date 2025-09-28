@@ -9,17 +9,24 @@ blueprint:
       selector:
         entity:
           domain: select
+        filter:
+          intergraion: mqtt
+          model: "SRTS-A01"
+
     temp_sensor:
       name: External sensor to synchronise
       selector:
         entity:
           domain: sensor
           device_class: temperature
-    climate:
+    aqara_trv:
       name: Aqara TRV
       selector:
         entity:
-          domain: climate
+          domain: number
+        filter:
+          intergraion: mqtt
+          model: "SRTS-A01"
 
 mode: single
 max_exceeded: silent
@@ -30,17 +37,37 @@ triggers:
     
 conditions: []
 actions:
-  - action: select.select_option
-    metadata: {}
-    data:
-      option: external
-    target:
-      entity_id: !input "sensor_selector"
-
-  - action: number.set_value
-    metadata: {}
-    data:
-      value: "{{states(temp_sensor) | float (0)}}"
-    target:
-      entity_id: !input "climate"
-
+  - if:
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: !input "temp_sensor"
+            state: unknown
+          - condition: state
+            entity_id: !input "temp_sensor"
+            state: unavailable
+    then:
+      - action: select.select_option
+        metadata: {}
+        data:
+          option: internal
+        target:
+          entity_id: !input "sensor_selector"
+    else:
+      - if:
+          - condition: state
+            entity_id: !input "sensor_selector"
+            state: internal
+        then:
+          - action: select.select_option
+            metadata: {}
+            data:
+              option: external
+            target:
+              entity_id: !input "sensor_selector"
+      - action: number.set_value
+        metadata: {}
+        data:
+          value: "{{states(temp_sensor) | float (25)}}"
+        target:
+          entity_id: !input "aqara_trv"
