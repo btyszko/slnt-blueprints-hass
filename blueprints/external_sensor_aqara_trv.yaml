@@ -11,7 +11,6 @@ blueprint:
           filter:
             - intergraion: mqtt
               domain: select
-              model: "SRTS-A01"
 
     temp_sensor:
       name: External sensor to synchronise
@@ -26,7 +25,6 @@ blueprint:
           filter:
             - intergraion: mqtt
               domain: number
-              model: "SRTS-A01"
 
 mode: single
 max_exceeded: silent
